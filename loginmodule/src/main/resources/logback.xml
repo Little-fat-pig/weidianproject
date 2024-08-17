@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--一个比较完成的logback配置-->
+
+<!-- scan : 当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true-->
+<configuration scan="false" scanPeriod="60 seconds" debug="false">
+    <!-- 日志级别从低到高分为TRACE < DEBUG < INFO < WARN < ERROR < FATAL，如果设置为WARN，则低于WARN的信息都不会输出 -->
+    <!-- scan:当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true -->
+    <!-- scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。 -->
+    <!-- debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
+    <contextName>logback</contextName>
+<!--    <property name="log.path" value="logs"></property>-->
+<!--    <property name="Console_Pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%logger{50}] - %msg%n"/>-->
+
+
+<!--    新增的一部分配置-->
+    <!-- 应用名称 -->
+    <property name="APP_NAME" value="login-login"/>
+    <!--定义日志文件的存储地址-->
+    <property name="LOG_HOME" value="/logs/${APP_NAME}"/>
+    <!-- 定义日志格式  -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%thread] [%-30.30logger{30}] %msg%n"/>
+    <!-- 高亮日志格式  -->
+    <property name="HIGHLIGHT_PATTERN" value="%yellow(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %highlight(%-5level) %green(%logger{50}) - %highlight(%msg) %n"/>
+
+    <!--    新增的一部分配置-->
+
+<!--    定义控制台，高亮打印日志信息-->
+    <appender name="CONSOLE-WITH-HIGHLIGHT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${HIGHLIGHT_PATTERN}</Pattern>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 时间滚动输出 level为 INFO 日志 -->
+    <appender name="RollingFileInfo" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!-- 如果是 true，日志会被安全的写入文件，即使其他的FileAppender也在向此文件做写入操作，效率低，默认是 false -->
+        <prudent>false</prudent>
+
+        <!-- 日志日常打印日志文件，生成日志示例：/logs/login-login/info.log -->
+        <file>${LOG_HOME}/info.log</file>
+
+
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+
+            <!-- 压缩日志的路径和日志格式，示例：info-2023-05-26_21.log.zip，%d{yyyy-MM-dd}：表示文件名称包含日期，%i:表示当前是第几个压缩文件 -->
+            <fileNamePattern>${OG_HOME}/info/log-info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!-- 如果按天来回滚，则最大保存时间为15天，15天之前的都将被清理掉 -->
+            <maxHistory>15</maxHistory>
+
+            <!-- 日志总保存量为10GB,超过该日志总量的日志压缩包会被清除 -->
+            <totalSizeCap>10GB</totalSizeCap>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!--文件达到 最大100MB时会被压缩和切割 -->
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+        </rollingPolicy>
+
+        <!-- 文件输出的日志 的格式 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{50}] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 此日志文件只记录info级别的 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 时间滚动输出 level为 WARN 日志 -->
+    <appender name="RollingFileWarn" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/warn.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{50}] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/warn/log-warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>15</maxHistory>
+
+
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+        <!-- 此日志文件只记录warn级别的 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>warn</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 时间滚动输出 level为 ERROR 日志 -->
+    <appender name="RollingFileError" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/error.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{50}] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/error/log-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件保留天数-->
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <!-- 此日志文件只记录ERROR级别的 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!--additivity:是否继承root节点，默认是true继承。默认情况下子Logger会继承父Logger的appender，
+    也就是说子Logger会在父Logger的appender里输出。
+    若是additivity设为false，则子Logger只会在自己的appender里输出，而不会在父Logger的appender里输出。-->
+    <logger name="org.springframework" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE-WITH-HIGHLIGHT"/>
+        <appender-ref ref="RollingFileInfo"/>
+    </logger>
+    <logger name="org.mybatis" level="INFO"></logger>
+    <Logger name="org.apache.catalina" level="info"/>
+    <Logger name="org.apache.tomcat.util" level="info"/>
+    <!-- 从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF-->
+    <root level="ALL">
+        <appender-ref ref="CONSOLE-WITH-HIGHLIGHT"/>
+        <appender-ref ref="RollingFileInfo"/>
+        <appender-ref ref="RollingFileWarn"/>
+        <appender-ref ref="RollingFileError"/>
+    </root>
+
+    <!--生产环境:输出到文件-->
+    <springProfile name="pro">
+        <root level="info">
+            <appender-ref ref="CONSOLE-WITH-HIGHLIGHT"/>
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileWarn"/>
+            <appender-ref ref="RollingFileError"/>
+        </root>
+    </springProfile>
+</configuration>
