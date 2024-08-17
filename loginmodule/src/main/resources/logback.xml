@@ -13,10 +13,15 @@
 
 
 <!--    新增的一部分配置-->
+
+<!--    定义的是一个跟目录文件-->
+    <property name="log.path" value="logs"></property>
+
+
     <!-- 应用名称 -->
-    <property name="APP_NAME" value="login-login"/>
+<!--    <property name="APP_NAME" value="login-login"/>-->
     <!--定义日志文件的存储地址-->
-    <property name="LOG_HOME" value="/logs/${APP_NAME}"/>
+    <property name="LOG_HOME" value="/logs/${log.path}"/>
     <!-- 定义日志格式  -->
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%thread] [%-30.30logger{30}] %msg%n"/>
     <!-- 高亮日志格式  -->
@@ -33,6 +38,52 @@
         </encoder>
     </appender>
 
+
+    <!-- 时间滚动输出 level为 Debug 日志 -->
+    <appender name="RollingFileDebug" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!-- 如果是 true，日志会被安全的写入文件，即使其他的FileAppender也在向此文件做写入操作，效率低，默认是 false -->
+        <prudent>false</prudent>
+
+        <!-- 日志日常打印日志文件，生成日志示例：/logs/login-login/info.log -->
+        <file>${log.path}/login.module.debug.log</file>
+
+
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+
+            <!-- 压缩日志的路径和日志格式，示例：info-2023-05-26_21.log.zip，%d{yyyy-MM-dd}：表示文件名称包含日期，%i:表示当前是第几个压缩文件 -->
+            <fileNamePattern>${log.path}/debug/login.module.log-debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!-- 如果按天来回滚，则最大保存时间为15天，15天之前的都将被清理掉 -->
+            <maxHistory>15</maxHistory>
+
+            <!-- 日志总保存量为10GB,超过该日志总量的日志压缩包会被清除 -->
+            <totalSizeCap>10GB</totalSizeCap>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!--文件达到 最大100MB时会被压缩和切割 -->
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+        </rollingPolicy>
+
+        <!-- 文件输出的日志 的格式 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{50}] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 此日志文件只记录Debug级别的 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+
+
     <!-- 时间滚动输出 level为 INFO 日志 -->
     <appender name="RollingFileInfo" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
@@ -40,14 +91,14 @@
         <prudent>false</prudent>
 
         <!-- 日志日常打印日志文件，生成日志示例：/logs/login-login/info.log -->
-        <file>${LOG_HOME}/info.log</file>
+        <file>${log.path}/login.module.info.log</file>
 
 
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 
             <!-- 压缩日志的路径和日志格式，示例：info-2023-05-26_21.log.zip，%d{yyyy-MM-dd}：表示文件名称包含日期，%i:表示当前是第几个压缩文件 -->
-            <fileNamePattern>${OG_HOME}/info/log-info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${log.path}/info/login.module.log-info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 
             <!-- 如果按天来回滚，则最大保存时间为15天，15天之前的都将被清理掉 -->
             <maxHistory>15</maxHistory>
@@ -78,13 +129,13 @@
 
     <!-- 时间滚动输出 level为 WARN 日志 -->
     <appender name="RollingFileWarn" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/warn.log</file>
+        <file>${log.path}/login.module.warn.log</file>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{50}] - %msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/warn/log-warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${log.path}/warn/login.module.log-warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -103,15 +154,15 @@
 
     <!-- 时间滚动输出 level为 ERROR 日志 -->
     <appender name="RollingFileError" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/error.log</file>
+        <file>${log.path}/login.module.error.log</file>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{50}] - %msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/error/log-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${log.path}/error/login.module.log-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>1MB</maxFileSize>
+                <maxFileSize>10MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <!--日志文件保留天数-->
             <maxHistory>15</maxHistory>
@@ -137,6 +188,7 @@
     <!-- 从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF-->
     <root level="ALL">
         <appender-ref ref="CONSOLE-WITH-HIGHLIGHT"/>
+        <appender-ref ref="RollingFileDebug"/>
         <appender-ref ref="RollingFileInfo"/>
         <appender-ref ref="RollingFileWarn"/>
         <appender-ref ref="RollingFileError"/>
