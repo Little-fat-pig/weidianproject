@@ -1,0 +1,5 @@
+#minio配置和使用
+minio:
+  endpoint: http://192.168.21.128:9000
+  accesskey:  d8M2UkEjC406kJjC8LS0
+  secretkwy: nXeIyDOR8Ymwmdlpgk7zJLdqMkk9IOcNkcAHmTnb
