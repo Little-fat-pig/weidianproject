@@ -1,5 +1,6 @@
 package com.example.loginmodule.service.Impl;
 import com.example.loginmodule.config.MinioProp;
+import com.example.loginmodule.service.MinioService;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Item;

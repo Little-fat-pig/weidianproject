@@ -1,4 +1,4 @@
-package com.example.loginmodule.service.Impl;
+package com.example.loginmodule.service;
 
 import io.minio.ObjectStat;
 
