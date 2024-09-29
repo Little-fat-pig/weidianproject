@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @author zhangxueliang7
@@ -51,31 +52,35 @@ public class SyncRedis {
 
     }
 
-//
-//    @Scheduled(cron = "${sync.activemq}")
-//    public void syncActiveMq() {
-//        for (int i = 0; i < 150; i++) {
-//            asyncService.sendInfoMq();
-//            log.info(UUID.randomUUID().toString().replaceAll("-","") + "时间" + System.currentTimeMillis() + Thread.currentThread().getName());
-//        }
-//    }
-
 
     @Scheduled(cron = "${sync.activemq}")
-    public void registerUser() {
-        //设计注册的用户名和密码  用户名目前只是用手机号模拟   密码就设计4为
-        //
-        for (int i = 0; i < 100; i++) {
-            UserEntity user = new UserEntity();
-            int password = new Random().nextInt(9999) + 1000;
-            String phoneNumber = "133" + password + "4759";
-            user.setUsername(phoneNumber);
-            user.setPassword(password + "");
-            BaseResult<?> baseResult = userService.loginOrRegister(user);
-            log.info("用户注册的结果{}", baseResult);
-
+    public void syncActiveMq() {
+        for (int i = 0; i < 150; i++) {
+//            asyncService.sendInfoMq();
+            log.debug("fjsdjfks");
+            log.error("kfdsjjhgjhdsj");
+            log.info(UUID.randomUUID().toString().replaceAll("-","") + "时间" + System.currentTimeMillis() + Thread.currentThread().getName());
         }
     }
+
+
+//    @Scheduled(cron = "${sync.activemq}")
+//    public void registerUser() {
+//        //模拟测试的动作完成，之后不在进行
+//
+//        //设计注册的用户名和密码  用户名目前只是用手机号模拟   密码就设计4为
+//        //
+////        for (int i = 0; i < 100; i++) {
+////            UserEntity user = new UserEntity();
+////            int password = new Random().nextInt(9999) + 1000;
+////            String phoneNumber = "133" + password + "4759";
+////            user.setUsername(phoneNumber);
+////            user.setPassword(password + "");
+////            BaseResult<?> baseResult = userService.loginOrRegister(user);
+////            log.info("用户注册的结果{}", baseResult);
+////
+////        }
+//    }
 
 
 }

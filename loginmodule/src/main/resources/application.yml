@@ -1,0 +1,41 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8078
+  servlet:
+    context-path: /login
+
+spring:
+  application:
+    #这个是项目的名称   和上下文是不一样的
+    name: loginModule
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/smma?zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 123456
+  activemq:
+    broker-url: tcp://10.192.16.226:7018
+    user: admin
+    password: BXbbycKz
+  redis:
+    database: 0
+    host: 10.192.16.210
+    port: 7019
+    password: 3xJJAf8U
+
+
+logging:
+  level:
+    root: info
+  config: classpath:logback.xml
+
+
+swagger:
+  enable: true
+
+#d定时任务样例   5秒刷新一次
+sync:
+  id: 0/5 * * * * ?
+  activemq: 0/5 * * * * ?
+
+

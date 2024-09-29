@@ -25,7 +25,7 @@
         <springfox.version>3.0.0</springfox.version>
         <mysql.version>8.0.33</mysql.version>
         <fastjson.version>1.2.83</fastjson.version>
-
+        <commons-lang-version>2.6</commons-lang-version>
     </properties>
 
 <!--    <parent>-->
@@ -131,6 +131,12 @@
             <version>${springfox.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${commons-lang-version}</version>
+        </dependency>
 
 
     </dependencies>
