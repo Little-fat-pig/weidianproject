@@ -43,7 +43,7 @@ class LoginmoduleApplicationTests {
         String code1 = Optional.ofNullable(jsonObject1).map(x -> x.getString("code")).orElseGet(() -> "-1");
 
 
-        //
+        //列举的一个反例
         //对象为空设置默认的对象  并设置默认的错误响应值  orElse只能设置一个空对象   无法为空对象设置 默认值
 //        JSONObject jsonObject = Optional.ofNullable(jsonObject1).orElse(()->
 //        {JSONObject j= new JSONObject();
